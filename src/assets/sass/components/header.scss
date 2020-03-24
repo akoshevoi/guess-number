@@ -1,0 +1,15 @@
+// ./sass/components/header.scss
+
+.header-title,
+.header-subtitle {
+  text-align: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.header-title {
+  padding: 5px;
+  margin-bottom: 10px;
+
+  background-color: $pink;
+}

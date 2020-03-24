@@ -1,0 +1,25 @@
+// ./sass/style.scss
+@import './variables';
+@import './components/app';
+@import './components/btn';
+@import './components/header';
+@import './components/select-number';
+@import './components/start-game';
+@import './components/modal';
+@import './components/opponent-guess';
+@import './components/game-over';
+
+body {
+    font-family: $font;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    margin: 0;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+

@@ -1,0 +1,26 @@
+// ./sass/components/start-game.scss
+
+.start-game {
+  width: 160px;
+  margin: 20px auto;
+  padding: 20px;
+
+  text-align: center;
+
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, .2);
+}
+
+.start-game-number {
+  width: 42px;
+  margin: 10px auto;
+  padding: 5px;
+
+  text-align: center;
+  font-size: 25px;
+  color: $violet;
+
+  border: 2px solid $violet;
+  border-radius: 5px;
+}

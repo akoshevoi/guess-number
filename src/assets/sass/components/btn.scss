@@ -1,0 +1,70 @@
+// ./sass/components/app.scss
+
+.btn {
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  background: none;
+
+  &--pink {
+    margin: 5px 25px;
+    color: $violet;
+
+    &:hover {
+      color: $tomato;
+    }
+  
+    &:focus {
+      outline: 2px solid $blue;
+    }
+  }
+
+  &--blue {
+    margin: 10px 0;
+    color: $blue;
+    text-transform: uppercase;
+
+    &:hover {
+      color: $dark-blue;
+    }
+
+    &:focus {
+      outline: 2px solid $blue;
+  }
+  }
+
+  &--orange {
+    color: $orange; 
+
+    &:hover {
+      color: $light-orange;
+    }
+
+    &:focus {
+        outline: 2px solid $blue;
+    }
+  }
+
+  &--number {
+    width: 50px;
+    padding: 5px 10px;
+    margin: 10px;
+  
+    font-size: 20px;
+    color: $white;
+    
+    background-color: $pink;
+    border: 1px solid $pink;
+    border-radius: 15px;
+
+    &:hover {
+      background-color: $light-pink;
+      border-color: $light-pink;
+    }
+  
+    &:focus {
+      outline: 2px solid $blue;
+    }
+  }
+}

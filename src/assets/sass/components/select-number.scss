@@ -1,0 +1,38 @@
+// ./sass/components/select-number.scss
+
+.select-number {
+  width: 270px;
+  margin: 20px auto;
+  padding: 15px;
+
+  text-align: center;
+
+  border: 1px solid $gray;
+  border-radius: 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, .2);
+}
+
+.select-number-label {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.select-number-input {
+  width: 46px;
+  padding: 8px;
+
+  text-align: center;
+  color: $violet;
+  font-size: 25px;
+  
+  border: none;
+  border-bottom: 2px solid $gray;
+
+  &:focus {
+    outline: 2px solid $blue;
+  }
+}
+
+.form-control {
+  margin: 10px 0;
+}
