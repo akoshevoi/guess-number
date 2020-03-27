@@ -86,24 +86,6 @@ export default class EnterNum extends React.Component {
   };
 
 
-  /*
-  * тут здесь прикреплю ф-ю из приложения по угадыванию - можт она
-  * поможет оптимизировать отгадывание, сам вникать не буду - голова уже не варит
-  *
-  * 
-  *
- generateRandomBetween = (min, max, exclude) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  const rndNum = Math.floor(Math.random() * (max - min)) + min;
-  if (rndNum === exclude) {
-    return generateRandomBetween(min, max, exclude);
-  } else {
-    return rndNum;
-  }
-};
-*/
-
   generateRandomNumber(min, max, value) {
     const { arrayOpponentsNumbers } = this;
     
@@ -317,28 +299,3 @@ export default class EnterNum extends React.Component {
     );
   }
 }
-
-/*
- * попробуй поставить некоторые из этих модулей
- * чтобы в vscode при нажатии ctrl + shift + i
- * или какая там по дефолту комбинация
- * срабатывало автоисправление кода, который
- * подчеркнут красным, сейчас не работает
- */
-
-/*
- * перед этим посмотри уроки 361-363 из
- * курса https://coursehunter.net/course/javascript-polnoe-rukovodstvo-2020-nachinayushchiy-prodvinutyy
- * и попробуй по ним настроить eslint
- */
-
-// "@babel/core": "^7.4.4",
-//     "@babel/runtime": "^7.4.4",
-//     "babel-eslint": "8.2.3",
-//     "babel-jest": "^24.8.0",
-//     "eslint": "^5.3.0",
-//     "eslint-config-airbnb-base": "12.1.0",
-//     "eslint-plugin-import": "^2.18.0",
-//     "eslint-plugin-jsx-a11y": "^6.2.1",
-//     "eslint-plugin-prettier": "^3.1.0",
-//     "eslint-plugin-react": "^7.14.2",

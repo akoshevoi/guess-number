@@ -4,9 +4,6 @@ import React from "react";
 import { WrongGuessModal } from "../components/modals";
 import { getMarkupOrNull } from "../utils/helpers";
 
-/*
- * перенести сюда в локальный стейт логику отображения и скрытия WrongGuessModal
- */
 
 const OpponentGuess = ({
   opponentNumber,//
@@ -40,13 +37,7 @@ const OpponentGuess = ({
       </div>
     );
   });
-/*
-  function getWrongGuessModal() {
-    return <WrongGuessModal onCloseWrongGuessModal={onCloseWrongGuessModal} />
-  };
 
-  const wrongGuessModal = getMarkupOrNull(getWrongGuessModal, wrongGuessModalEnabled);
-*/
   return (
     <div>
       <div className="opponent-guess-title">Opponent's Guess</div>
