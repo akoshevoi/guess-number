@@ -1,7 +1,9 @@
 // @flow
-import React from "react";
+import React from 'react';
 
-const WrongGuessModal = ({ onCloseWrongGuessModal }) => (
+type method = Function;
+
+const WrongGuessModal = ({ onCloseWrongGuessModal } : { onCloseWrongGuessModal : method }) => (
   <div className="overlay">
     <div className="modal">
       <h5 className="modal-title">Don't Lie!</h5>

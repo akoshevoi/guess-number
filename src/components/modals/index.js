@@ -1,4 +1,2 @@
-import InvalidNumModal from "./InvalidNumModal";
-import WrongGuessModal from "./WrongGuessModal";
-
-export { WrongGuessModal, InvalidNumModal };
+export { default as InvalidNumModal } from './InvalidNumModal';
+export { default as WrongGuessModal } from './WrongGuessModal';

@@ -1,42 +1,56 @@
 // @flow
-import React from "react";
+import React, { useState } from 'react';
 
-import { WrongGuessModal } from "../components/modals";
-import { getMarkupOrNull } from "../utils/helpers";
+import { WrongGuessModal } from '../components/modals';
+import { getMarkupOrNull } from '../utils/helpers';
 
+/*
+ * перенести сюда в локальный стейт логику отображения и скрытия WrongGuessModal
+ */
 
 const OpponentGuess = ({
-  opponentNumber,//
-  wrongGuessModalEnabled,//
-  setWrongGuessModalEnabled,
-  guessNumber,//
-  opponentNumberChange,//
-  dataOpponents,//
-  onCloseWrongGuessModal//
+  opponentNumber,
+  guessNumber,
+  opponentNumberChange,
+  dataOpponents,
+  onCloseWrongGuessModal
 }) => {
+  const [
+    wrongGuessModalEnabled,
+    setWrongGuessModalEnabled
+  ] = useState(false);
+
   const checkBtn = e => {
-    const className = e.target.className;
-    const valueBtn = className.indexOf("minus") > -1 ? "minus" : "plus";
-    const biggerNumber = guessNumber > opponentNumber ? "player" : "computer";
+    const { className } = e.target;
+    const valueBtn = className.indexOf('minus') > -1 ? 'minus' : 'plus';
+    const biggerNumber = guessNumber > opponentNumber ? 'player' : 'computer';
 
     if (
-      (valueBtn === "plus" && biggerNumber === "computer") ||
-      (valueBtn === "minus" && biggerNumber === "player")
+      (valueBtn === 'plus' && biggerNumber === 'computer')
+      || (valueBtn === 'minus' && biggerNumber === 'player')
     ) {
-      setWrongGuessModalEnabled();
+      setWrongGuessModalEnabled(!wrongGuessModalEnabled);
     } else {
       opponentNumberChange(valueBtn);
     }
   };
 
-  const elements = dataOpponents.map(({ index, number, id }) => {
-    return (
+  const elements = dataOpponents.map(({ index, number, id }) => (
       <div key={id} className="opponent-guess-item">
         <div className="opponent-guess-element">#{index}</div>
         <div className="opponent-guess-element">{number}</div>
       </div>
-    );
-  });
+    ));
+
+  onCloseWrongGuessModal = () => {
+    setWrongGuessModalEnabled(!wrongGuessModalEnabled);
+  };
+
+  function getWrongGuessModal() {
+    return <WrongGuessModal onCloseWrongGuessModal={onCloseWrongGuessModal} />;
+  }
+
+  const wrongGuessModal = getMarkupOrNull(getWrongGuessModal, wrongGuessModalEnabled);
 
   return (
     <div>
@@ -51,7 +65,7 @@ const OpponentGuess = ({
         </button>
       </div>
       <div className="opponent-guess-list">{elements}</div>
-       {/* {wrongGuessModal}  */}
+        {wrongGuessModal}
     </div>
   );
 };

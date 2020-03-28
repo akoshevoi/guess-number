@@ -1,7 +1,9 @@
 // @flow
-import React from "react";
+import React from 'react';
 
-const InvalidNumModal = ({ onApply }) => (
+type method = Function;
+
+const InvalidNumModal = ({ onApply } : {onApply : method}) => (
   <div className="overlay">
     <div className="modal">
       <h5 className="modal-title">Invalid Number!</h5>

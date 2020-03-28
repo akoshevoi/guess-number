@@ -3,16 +3,16 @@
 .opponent-guess-title {
   text-align: center;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .opponent-guess-number {
-  width: 42px;
-  margin: 10px auto;
+  width: 50px;
+  margin: 20px auto;
   padding: 5px;
 
   text-align: center;
-  font-size: 25px;
+  font-size: 26px;
   color: $violet;
 
   border: 2px solid $violet;
@@ -21,7 +21,7 @@
 
 .opponent-guess-btn-group {
   margin: 20px auto;
-  padding: 15px;
+  padding: 10px;
 
   text-align: center;
 
@@ -36,7 +36,7 @@
   margin-bottom: 15px;
   padding: 15px;
 
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   
   border: 1px solid $gray;

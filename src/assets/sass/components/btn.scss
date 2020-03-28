@@ -1,7 +1,7 @@
 // ./sass/components/app.scss
 
 .btn {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   border: none;
@@ -47,16 +47,16 @@
   }
 
   &--number {
-    width: 50px;
-    padding: 5px 10px;
-    margin: 10px;
-  
-    font-size: 20px;
-    color: $white;
+    width: 76px;
+    padding: 10px;
+    margin: 10px 24px;
+
+    font-size: 21px;
+    color: #fff;
     
-    background-color: $pink;
-    border: 1px solid $pink;
-    border-radius: 15px;
+    background-color: #ff4eab;
+    border: 1px solid #ff4eab;
+    border-radius: 30px;
 
     &:hover {
       background-color: $light-pink;

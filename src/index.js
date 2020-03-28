@@ -1,6 +1,6 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-import EnterNum from "./containers/EnterNum";
+import EnterNum from './containers/EnterNum';
 
-ReactDOM.render(<EnterNum />, document.getElementById("root"));
+ReactDOM.render(<EnterNum />, document.getElementById('root'));

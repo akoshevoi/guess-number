@@ -13,12 +13,12 @@
 }
 
 .select-number-label {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
 }
 
 .select-number-input {
-  width: 46px;
+  width: 60px;
   padding: 8px;
 
   text-align: center;
@@ -33,6 +33,11 @@
   }
 }
 
+.select-number-btn-group {
+  text-align: center;
+}
+
 .form-control {
   margin: 10px 0;
+  text-align: center;
 }
