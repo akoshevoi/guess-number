@@ -1,4 +1,5 @@
 // ./sass/style.scss
+
 @import './variables';
 @import './components/app';
 @import './components/btn';
@@ -11,16 +12,21 @@
 @import './components/error';
 
 body {
-    font-family: $font;
+	font-family: $font;
 }
 
-h1, h2, h3, h4, h5, h6, p {
-    margin: 0;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+	margin: 0;
 }
 
 *,
 *:before,
 *:after {
-    box-sizing: border-box;
+	box-sizing: border-box;
 }
-

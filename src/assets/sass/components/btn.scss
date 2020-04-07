@@ -1,70 +1,72 @@
-// ./sass/components/app.scss
+// ./sass/components/btn.scss
 
 .btn {
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  border: none;
-  background: none;
+	font-size: 16px;
+	font-weight: 700;
+	text-decoration: none;
 
-  &--pink {
-    margin: 5px 25px;
-    color: $violet;
+	border: none;
+	background: none;
+	cursor: pointer;
 
-    &:hover {
-      color: $tomato;
-    }
-  
-    &:focus {
-      outline: 2px solid $blue;
-    }
-  }
+	&--pink {
+		margin: 5px 25px;
+		color: $violet;
 
-  &--blue {
-    margin: 10px 0;
-    color: $blue;
-    text-transform: uppercase;
+		&:hover {
+			color: $tomato;
+		}
 
-    &:hover {
-      color: $dark-blue;
-    }
+		&:focus {
+			outline: 2px solid $blue;
+		}
+	}
 
-    &:focus {
-      outline: 2px solid $blue;
-  }
-  }
+	&--blue {
+		margin: 10px 0;
+		color: $blue;
+		text-transform: uppercase;
 
-  &--orange {
-    color: $orange; 
+		&:hover {
+			color: $dark-blue;
+		}
 
-    &:hover {
-      color: $light-orange;
-    }
+		&:focus {
+			outline: 2px solid $blue;
+		}
+	}
 
-    &:focus {
-        outline: 2px solid $blue;
-    }
-  }
+	&--orange {
+		color: $orange;
 
-  &--number {
-    width: 76px;
-    padding: 10px;
-    margin: 10px 24px;
+		&:hover {
+			color: $light-orange;
+		}
 
-    font-size: 21px;
-    color: #fff;
-    
-    background-color: #ff4eab;
-    border: 1px solid #ff4eab;
-    border-radius: 30px;
+		&:focus {
+			outline: 2px solid $blue;
+		}
+	}
 
-    &:hover {
-      background-color: $light-pink;
-      border-color: $light-pink;
-    }
-  
-    &:focus {
-      outline: 2px solid $blue;
-    }
-  }
+	&--number {
+		width: 76px;
+		padding: 10px;
+		margin: 10px 24px;
+
+		font-size: 21px;
+		color: #fff;
+
+		background-color: #ff4eab;
+		border: 1px solid #ff4eab;
+		border-radius: 30px;
+
+		&:hover {
+			background-color: $light-pink;
+			border-color: $light-pink;
+		}
+
+		&:focus {
+			outline: 2px solid $blue;
+		}
+	}
 }

@@ -1,13 +1,15 @@
-.error-banner {
-  width: 165px;
-  height: 165px;
-  margin: 20px auto;
+// ./sass/components/error.scss
 
-  background: url('../../img/mount.jpg') center no-repeat;
-  border: 2px solid $black;
-  border-radius: 50%;
+.error-banner {
+	width: 165px;
+	height: 165px;
+	margin: 20px auto;
+
+	background: url('../../img/mount.jpg') center no-repeat;
+	border: 2px solid $black;
+	border-radius: 50%;
 }
 
 .error-text {
-  text-align: center;
+	text-align: center;
 }
