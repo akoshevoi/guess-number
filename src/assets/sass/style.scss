@@ -2,7 +2,7 @@
 
 @import './variables';
 @import './components/app';
-@import './components/btn';
+@import './components/sub-header';
 @import './components/header';
 @import './components/select-number';
 @import './components/start-game';
@@ -10,6 +10,8 @@
 @import './components/opponent-guess';
 @import './components/game-over';
 @import './components/error';
+@import './components/not-found';
+@import './components/auth';
 
 body {
 	font-family: $font;
@@ -29,4 +31,11 @@ p {
 *:before,
 *:after {
 	box-sizing: border-box;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 15px;
 }

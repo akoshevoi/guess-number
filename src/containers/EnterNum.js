@@ -1,227 +1,240 @@
 // @flow
-
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+import {
+  makeStyles,
+  createMuiTheme,
+  ThemeProvider,
+  Grid,
+  Paper,
+  Button,
+  TextField
+} from '@material-ui/core';
 import { getMarkupOrNull } from '../utils/helpers';
 import { InvalidNumModal } from '../components/modals';
-import ErrorBoundary from '../components/ErrorBoundary/ErrorBoundary';
-import StartGame from '../components/StartGame/StartGame';
-import OpponentGuess from './OpponentGuess';
-import { Header } from '../components/header';
-import GameOver from './GameOver';
-import { withRouter, Link, Route } from 'react-router-dom';
+import { SubHeader } from '../components/subHeader';
+import { withAuthorization } from '../components/session';
+
 import '../assets/sass/style.scss';
 
-type Props = {
-  history: Object
-};
+// Overriding Material UI styles
+const useStylesFontSize = makeStyles({
+  root: {
+    fontSize: 16
+  }
+});
 
-type State = {
+const useStylesColors = makeStyles({
+  root: {
+    'fontSize': 16,
+    'color': '#dc00dc',
+    'textTransform': 'capitalize',
+    '&:hover': {
+      color: '#f120ff',
+      backgroundColor: '#f020ff1a'
+    }
+  }
+});
+
+const theme = createMuiTheme({
+  overrides: {
+    // TextField component
+    MuiInput: {
+      formControl: {
+        'label + &': {
+          marginTop: 25
+        }
+      }
+    },
+    MuiFormControl: {
+      root: {
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center'
+      }
+    },
+    MuiFormLabel: {
+      root: {
+        width: '100%',
+        color: '#000'
+      }
+    },
+    MuiInputLabel: {
+      formControl: {
+        width: '100%',
+        textAlign: 'center',
+        transform: `translate(${0}px, ${15}px) scale(1)`
+      },
+      shrink: {
+        fontSize: 18,
+        textAlign: 'center',
+        visibility: 'visible',
+        position: 'absolute',
+        transform: 'none'
+      }
+    },
+    MuiInputBase: {
+      input: {
+        padding: 5,
+        textAlign: 'center',
+        fontSize: 25
+      },
+      root: {
+        width: '20%'
+      }
+    },
+    // Grid component
+    MuiGrid: {
+      container: {
+        margin: '5px 0'
+      },
+      item: {
+        margin: 5
+      }
+    },
+    // Paper component
+    MuiPaper: {
+      root: {
+        margin: '20px auto',
+        padding: 10
+      },
+      elevation1: {
+        boxShadow: '0px 0px 3px 3px rgba(0,0,0,0.2)'
+      }
+    }
+  }
+});
+
+// Flow type
+type Props = {
   guessNumber: number,
-  opponentNumber: number,
   invalidNumModalEnabled: boolean,
   isValidNum: boolean,
-  isGameStarted: boolean,
-  isGameOver: boolean,
-  dataOpponents: Array<mixed>
+  resetState: Function,
+  setGuessNumber: Function,
+  checkValidNum: Function,
+  setStartGameData: Function
 };
 
-class EnterNum extends React.Component<Props, State> {
-  countReplay = 0;
+// Component EnterNum
+const EnterNum = ({
+  guessNumber,
+  invalidNumModalEnabled,
+  isValidNum,
+  resetState,
+  setGuessNumber,
+  checkValidNum,
+  setStartGameData
+}: Props) => {
+  const blueButton = useStylesFontSize(); // styles for button 'START GAME
+  const pinkButton = useStylesColors(); // styles for button 'Reset', 'Confirm'
 
-  indexOpponentsNumbers = 1;
+  let history = useHistory(); // variable with history of routings
 
-  arrayOpponentsNumbers = [];
-
-  static defaultProps = {
-    history: {}
+  const goToNextScreen = () => {
+    // Function goToNextScreen represents the transition
+    setStartGameData(); // to the screen 'Opponent Guess'.
+    history.push('/opponent-guess'); // Called by clicking button “START GAME”
   };
 
-  state = {
-    guessNumber: 0,
-    opponentNumber: 0,
-    invalidNumModalEnabled: false,
-    isValidNum: false,
-    isGameStarted: false,
-    isGameOver: false,
-    dataOpponents: []
-  };
-
-  resetState = () => {
-    this.indexOpponentsNumbers = 1;
-    this.countReplay = 0;
-    this.arrayOpponentsNumbers = [];
-    this.setState(
-      {
-        guessNumber: 0,
-        opponentNumber: 0,
-        invalidNumModalEnabled: false,
-        isValidNum: false,
-        isGameStarted: false,
-        isGameOver: false,
-        dataOpponents: []
-      },
-      this.props.history.push('/')
-    );
-  };
-
-  setGuessNumber = ({ target }: Object) => {
-    const validNumber = target.value.replace(/[^0-9]/g, '');
-    this.setState({ guessNumber: +validNumber });
-  };
-
-  setIsValidNum = (bool: boolean) => {
-    this.setState({ isValidNum: bool }, this.props.history.push('/start-game'));
-  };
-
-  setInvalidNumModalEnabled = (bool: boolean) => {
-    this.setState(
-      { invalidNumModalEnabled: bool },
-      this.props.history.push('/invalid-number')
-    );
-  };
-
-  checkValidNum = (e: Object) => {
-    e.preventDefault();
-    const { guessNumber } = this.state;
-    const isValidNum = guessNumber >= 1 && guessNumber <= 99;
-
-    if (isValidNum) {
-      this.setIsValidNum(true);
-    } else {
-      this.setInvalidNumModalEnabled(true);
-    }
-  };
-
-  generateRandomNumber = (min, max, exclude) => {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    const rndNum = Math.floor(Math.random() * (max - min)) + min;
-    if (rndNum === exclude) {
-      return this.generateRandomNumber(min, max, exclude);
-    } else {
-      return rndNum;
-    }
-  };
-
-  setStartGameData = () => {
-    const { guessNumber } = this.state;
-    const opponentNumber = this.generateRandomNumber(1, 100, guessNumber);
-
-    this.setState(
-      {
-        isGameStarted: true,
-        opponentNumber
-      },
-      this.props.history.push('/opponent-guess')
-    );
-  };
-
-  setGameOver = (bool: boolean) => {
-    this.setState({ isGameOver: bool });
-  };
-
-  setDataOpponents = (array: Array<mixed>) => {
-    this.setState({ dataOpponents: array });
-  };
-
-  getLabel = () => (
-    <div className='form-control'>
-      <label className='select-number-label' htmlFor='input'>
-        Select a Number
-      </label>
-    </div>
-  );
-
-  getInput = () => (
-    <div className='form-control'>
-      <input
-        className='select-number-input'
-        onChange={this.setGuessNumber}
-        value={this.state.guessNumber}
-        id='input'
-      />
-    </div>
-  );
-
-  getButtonGroup = () => (
-    <div className='select-number-btn-group'>
-      <button className='btn btn--pink' type='reset' onClick={this.resetState}>
-        Reset
-      </button>
-      <Link
-        to='/check-number'
-        className='btn btn--pink'
-        onClick={this.checkValidNum}
+  // A piece of markup that appear if the number is valid
+  const getStartGameBlock = () => (
+    <div className='start-game'>
+      <h5 className='start-game__title'>You selected</h5>
+      <div className='start-game__number'>{guessNumber}</div>
+      <Button
+        color='primary'
+        classes={{ root: blueButton.root }}
+        onClick={goToNextScreen}
       >
-        Confirm
-      </Link>
+        Start Game
+      </Button>
     </div>
   );
 
-  getInvalidNumModal = () => <InvalidNumModal onApply={this.resetState} />;
+  // A component that appear if the number is invalid (InvalidNumModal)
+  const getInvalidNumModal = () => <InvalidNumModal onApply={resetState} />;
 
-  getGameOver = () => (
-    <GameOver
-      guessNumber={this.state.guessNumber}
-      dataOpponents={this.state.dataOpponents.length}
-      resetState={this.resetState}
-    />
+  /*
+   * A helper function that shows pieces of markup or
+   * components depending on the validity of a number
+   */
+  const startGameBlock = getMarkupOrNull(getStartGameBlock, isValidNum);
+  const invalidNumModal = getMarkupOrNull(
+    getInvalidNumModal,
+    invalidNumModalEnabled
   );
 
-  render() {
-    const {
-      guessNumber,
-      isValidNum,
-      invalidNumModalEnabled,
-      opponentNumber,
-      isGameOver
-    } = this.state;
+  return (
+    <div className='app'>
+      <SubHeader />
+      <p className='select-number__title'>Start a New Game!</p>
+      <ThemeProvider theme={theme}>
+        {' '}
+        {/* ThemeProvider (change styles of component Material UI) */}
+        {/* Card with box-shadow */}
+        <Paper>
+          <form>
+            {/* Common Grid-container */}
+            <Grid
+              container
+              direction='column'
+              justify='space-between'
+              alignItems='center'
+            >
+              {/* Input Grid-item */}
+              <Grid item>
+                <TextField
+                  id='standard-secondary'
+                  label='Select a Number'
+                  color='primary'
+                  onChange={setGuessNumber}
+                  value={(guessNumber = isValidNum ? '' : guessNumber)}
+                />
+              </Grid>
+              {/* Button Grid-container */}
+              <Grid
+                container
+                direction='row'
+                justify='space-evenly'
+                alignItems='center'
+              >
+                {/* Button Grid-item */}
+                <Grid item>
+                  <Button
+                    color='secondary'
+                    classes={{ root: pinkButton.root }}
+                    onClick={resetState}
+                  >
+                    Reset
+                  </Button>
+                </Grid>
+                {/* Button Grid-item */}
+                <Grid item>
+                  <Button
+                    color='secondary'
+                    classes={{ root: pinkButton.root }}
+                    onClick={checkValidNum}
+                  >
+                    Confirm
+                  </Button>
+                </Grid>
+              </Grid>{' '}
+              {/* Button Grid-container */}
+            </Grid>{' '}
+            {/* Common Grid-container */}
+          </form>
+        </Paper>{' '}
+        {/* Card with box-shadow */}
+      </ThemeProvider>
+      {/* A piece of markup that appear if the number is invalid */}
+      {invalidNumModal}
+      {/* A piece of markup that appear if the number is valid */}
+      {startGameBlock}
+    </div>
+  );
+};
 
-    const label = this.getLabel();
-    const input = this.getInput();
-    const buttonGroup = this.getButtonGroup();
-    const gameOver = getMarkupOrNull(this.getGameOver, isGameOver);
+const condition = authUser => !!authUser;
 
-    return (
-      <div className='app'>
-        <ErrorBoundary>
-          <Header />
-          <div className='select-number'>
-            <form>
-              {label}
-              {input}
-              {buttonGroup}
-            </form>
-          </div>
-          <Route
-            path='/check-number'
-            children={() => {
-              if (isValidNum) {
-                return (
-                  <StartGame
-                    guessNumber={guessNumber}
-                    setStartGameData={this.setStartGameData}
-                  />
-                );
-              } else if (invalidNumModalEnabled) {
-                return <InvalidNumModal onApply={this.resetState} />;
-              }
-            }}
-          />
-          <Route path='/opponent-guess'>
-            <OpponentGuess
-              opponentNumber={opponentNumber}
-              guessNumber={guessNumber}
-              generateRandomNumber={this.generateRandomNumber}
-              setGameOver={this.setGameOver}
-              setDataOpponents={this.setDataOpponents}
-            />
-          </Route>
-          {gameOver}
-        </ErrorBoundary>
-      </div>
-    );
-  }
-}
-
-export default withRouter(EnterNum);
+export default withAuthorization(condition)(EnterNum);

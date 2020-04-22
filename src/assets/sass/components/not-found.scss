@@ -1,0 +1,24 @@
+// src/assets/sass/components/not-found.scss
+
+.not-found {
+  text-align: center;
+}
+
+.not-found__content {
+  font-weight: 700;
+  color: #ff4eab;
+}
+
+.not-found__number,
+.not-found__text {
+  margin: 15px 0;
+}
+
+
+.not-found__number {
+  font-size: 55px;
+}
+
+.not-found__text {
+  text-transform: uppercase;
+}

@@ -1,4 +1,4 @@
-// ./sass/components/start-game.scss
+// src/assets/sass/components/start-game.scss
 
 .start-game {
   width: 160px;
@@ -12,7 +12,7 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, .2);
 }
 
-.start-game-number {
+.start-game__number {
   width: 60px;
   margin: 10px auto;
   padding: 5px;

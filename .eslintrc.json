@@ -24,7 +24,7 @@
     "max-len": ["error", {"code": 80, "tabWidth": 2}], 
     "quote-props": ["error", "consistent"],
     "semi": "error", 
-    "quotes": ["error", "single"], 
+    "quotes": ["error", "single", { "allowTemplateLiterals": true }], 
     "comma-dangle": ["error", "never"],
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error"

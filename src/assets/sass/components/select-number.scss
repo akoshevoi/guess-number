@@ -1,43 +1,7 @@
-// ./sass/components/select-number.scss
+// src/assets/sass/components/select-number.scss
 
-.select-number {
-  width: 270px;
-  margin: 20px auto;
-  padding: 15px;
-
+.select-number__title {
   text-align: center;
-
-  border: 1px solid $gray;
-  border-radius: 5px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, .2);
-}
-
-.select-number-label {
-  font-size: 14px;
   font-weight: 700;
-}
-
-.select-number-input {
-  width: 60px;
-  padding: 8px;
-
-  text-align: center;
-  color: $violet;
-  font-size: 25px;
-  
-  border: none;
-  border-bottom: 2px solid $gray;
-
-  &:focus {
-    outline: 2px solid $blue;
-  }
-}
-
-.select-number-btn-group {
-  text-align: center;
-}
-
-.form-control {
-  margin: 10px 0;
-  text-align: center;
+  font-size: 15px;
 }

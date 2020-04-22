@@ -1,12 +1,12 @@
 // @flow
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import EnterNum from './containers/EnterNum';
-import { BrowserRouter as Router } from 'react-router-dom';
+import Firebase, { FirebaseContext } from './components/firebase';
+import App from './containers/App';
 
 ReactDOM.render(
-  <Router>
-    <EnterNum />
-  </Router>, // $FlowIgnore
-  document.getElementById('root'));
+  <FirebaseContext.Provider value={new Firebase()}>
+    <App />
+  </FirebaseContext.Provider>, // $FlowIgnore
+  document.getElementById('root')
+);

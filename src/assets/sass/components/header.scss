@@ -1,15 +1,36 @@
-// ./sass/components/header.scss
+// src/assets/sass/components/header.scss
 
-.header-title,
-.header-subtitle {
-  text-align: center;
-  font-weight: 700;
-  font-size: 15px;
+.header {
+  background-color: $pink;
+  
+  &--auth {
+    background-color: #3f51b5;
+  }
 }
 
-.header-title {
+.header__title {
   padding: 5px;
   margin-bottom: 10px;
 
-  background-color: $pink;
+  text-align: center;
+  font-weight: 700;
+  font-size: 15px;
+
 }
+
+.header__inner,
+.header__user {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header__email {
+  color: $white;
+  font-size: 18px;
+  margin: 0 10px;
+}
+
+
+
+

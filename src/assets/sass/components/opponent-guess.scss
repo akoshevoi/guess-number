@@ -1,12 +1,12 @@
-// ./sass/components/opponent-guess.scss
+// src/assets/sass/components/opponent-guess.scss
 
-.opponent-guess-title {
+.opponent-guess__title {
   text-align: center;
   font-weight: 700;
   font-size: 15px;
 }
 
-.opponent-guess-number {
+.opponent-guess__number {
   width: 50px;
   margin: 20px auto;
   padding: 5px;
@@ -19,18 +19,7 @@
   border-radius: 5px;
 }
 
-.opponent-guess-btn-group {
-  margin: 20px auto;
-  padding: 10px;
-
-  text-align: center;
-
-  border: 1px solid $gray;
-  border-radius: 5px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, .2);
-}
-
-.opponent-guess-item {
+.opponent-guess__item {
   display: flex;
   justify-content: space-between;
   margin-bottom: 15px;

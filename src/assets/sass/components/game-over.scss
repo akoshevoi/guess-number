@@ -1,6 +1,6 @@
-// ./sass/components/game-over.scss
+// src/assets/sass/components/game-over.scss
 
-.game-over-title {
+.game-over__title {
   margin: 15px 0;
   
   text-align: center;
@@ -8,7 +8,7 @@
   font-size: 15px;
 }
 
-.game-over-banner {
+.game-over__banner {
   width: 165px;
   height: 165px;
   margin: 20px auto;
@@ -18,12 +18,12 @@
   border-radius: 50%;
 }
 
-.game-over-content {
+.game-over__content {
   text-align: center;
 }
 
-.game-over-rounds,
-.game-over-number {
+.game-over__rounds,
+.game-over__number {
   margin-bottom: 10px;
 
   font-size: 17px;
