@@ -65,7 +65,6 @@ type Props = {
   changeError: Function
 };
 
-// Component SignIn
 const SignIn = ({
   firebase,
   history,
@@ -75,56 +74,40 @@ const SignIn = ({
   changeState,
   changeError
 }: Props) => {
-  // Hooks useState
+  const classes = useStyles();
 
-  // A state of showing/hiding of password
-  const [isShowPassword, showPassword] = useState(false);
+   /**
+   * Status of showing / hiding password, highlighting inputs, 
+   * contents of auxiliary texts
+   */
+  const [isGlowErrorEmail, setGlowErrorEmail] = useState(false);
+  const [isGlowErrorPassword, setGlowErrorPassword] = useState(false);
 
-  // Email input highlight status
-  const [isErrorEmail, setIsErrorEmail] = useState(false);
-
-  // Password input highlight status
-  const [isErrorPassword, seIsErrorPassword] = useState(false);
-
-  // Password input helper text contents
   const [errorTextPassword, setErrorTextPassword] = useState('');
 
-  // A function that write in state value of input. Called by change input
+  const [isShowPassword, setShowPassword] = useState(false);
+
+  // SignIn functions
   const onChange = event => {
     changeInput(event);
   };
 
-  /*
-   * A function that colors email addresses and passwords in red
-   * and displays an error message. Called by clickin button 'Sign In'.
-   */
   const showError = error => {
     if (error) {
-      setIsErrorEmail(true);
-      seIsErrorPassword(true);
+      setGlowErrorEmail(true);
+      setGlowErrorPassword(true);
       setErrorTextPassword(error);
     } else {
-      setIsErrorEmail(false);
-      seIsErrorPassword(false);
+      setGlowErrorEmail(false);
+      setGlowErrorPassword(false);
       setErrorTextPassword('');
     }
   };
 
-  // Classes for hiding or showing password
-  const classes = useStyles();
-
-  // A function that show/hide password
-  const handleClickShowPassword = () => {
-    showPassword(!isShowPassword);
+  const showPassword = () => {
+    setShowPassword(!isShowPassword);
   };
 
-  /*
-   * A function that logs in via password, email
-   * and jumps to the game start screen or
-   * colors email addresses and passwords in red
-   * and displays an error message.
-   * Called by function onSubmit
-   */
   const logIn = () => {
     firebase
       .doSignInWithEmailAndPassword(email, passwordOne)
@@ -140,27 +123,18 @@ const SignIn = ({
       });
   };
 
-  /*
-   * A function that doing same actions that function logIn.
-   * Called by clicking button SignIn
-   */
   const onSubmit = event => {
     event.preventDefault();
     logIn();
   };
 
-  /*
-   * A fuction that jumps to the sign up screen.
-   * Called by clicking Sign Un button
-   */
-  const signUp = () => {
+  const signIn = () => {
     history.push('/sign-up');
   };
 
   return (
     <ThemeProvider theme={theme}>
-      {' '}
-      {/* Change styles of MUI component */}
+      {/* SignIn form container */}
       <div className='auth'>
         {/* Card with box-shadow */}
         <Paper>
@@ -169,11 +143,10 @@ const SignIn = ({
               <TextField
                 type='text'
                 name='email'
-                value={email}
                 label='Enter email'
                 variant='outlined'
                 onChange={onChange}
-                error={isErrorEmail}
+                error={isGlowErrorEmail}
               />
             </FormControl>
             <FormControl
@@ -181,7 +154,7 @@ const SignIn = ({
               variant='outlined'
             >
               <InputLabel
-                style={isErrorPassword ? { color: 'red' } : null}
+                style={isGlowErrorPassword ? { color: 'red' } : null}
                 htmlFor='standard-adornment-password'
               >
                 Enter password
@@ -189,15 +162,14 @@ const SignIn = ({
               <OutlinedInput
                 type={isShowPassword ? 'text' : 'password'}
                 name='passwordOne'
-                value={passwordOne}
                 id='standard-adornment-password'
                 onChange={onChange}
-                error={isErrorPassword}
+                error={isGlowErrorPassword}
                 endAdornment={
                   <InputAdornment position='end'>
                     <IconButton
                       aria-label='toggle password visibility'
-                      onClick={handleClickShowPassword}
+                      onClick={showPassword}
                     >
                       {isShowPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
@@ -216,8 +188,8 @@ const SignIn = ({
             </FormControl>
             {/* Sign Up button */}
             <p>
-              Don't have an account?
-              <Button color='primary' onClick={signUp}>
+              <span className='auth__question'>Don't have an account?</span> 
+              <Button color='primary' onClick={signIn}>
                 Sign Up
               </Button>
             </p>

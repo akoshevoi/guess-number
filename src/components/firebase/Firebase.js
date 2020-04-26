@@ -4,14 +4,14 @@ import 'firebase/auth';
 import 'firebase/database';
 
 const config = {
-  apiKey: 'AIzaSyBdEqmkmoXzVNvueEMfA8kutV2wiuW33sI',
-  authDomain: 'guess-number-bc6db.firebaseapp.com',
-  databaseURL: 'https://guess-number-bc6db.firebaseio.com',
-  projectId: 'guess-number-bc6db',
-  storageBucket: 'guess-number-bc6db.appspot.com',
-  messagingSenderId: '723180061676',
-  appId: '1:723180061676:web:be52c856f69247a98eb6c9',
-  measurementId: 'G-6K05SRBDFQ'
+  apiKey: YOUR_API_KEY,
+  authDomain: YOUR_AUTH_DOMAIN,
+  databaseURL: YOUR_DATABASE_URL,
+  projectId: YOUR_PROJECT_ID,
+  storageBucket: '',
+  messagingSenderId: YOUR_MESSAGING_SENDER_ID,
+  appId: YOUR_APP_ID,
+  measurementId: YOUR_MEASUREMENT_ID
 };
 
 class Firebase {
@@ -36,6 +36,18 @@ class Firebase {
   users = () => this.db.ref('users');
 
   user = (uid: string) => this.db.ref(`users/${uid}`);
+
+  doCreateUser = (
+    id: string,
+    username: string,
+    email: string,
+    password: string
+  ) =>
+    this.db.ref(`users/${id}`).set({
+      username,
+      email,
+      password
+    });
 
   currentUser = () => this.auth.currentUser;
 }

@@ -14,7 +14,6 @@ const useStylesColors = makeStyles({
   }
 });
 
-// Component SignOutButton
 const SignOutButton = ({ firebase }: Object) => {
   const signOutButton = useStylesColors(); // styles for Sign Out button
 

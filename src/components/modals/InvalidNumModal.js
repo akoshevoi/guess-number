@@ -1,14 +1,14 @@
 // @flow
-import React from 'react';
 import {
-  makeStyles,
-  createMuiTheme,
-  ThemeProvider,
-  Modal,
   Backdrop,
+  Button,
+  createMuiTheme,
+  makeStyles,
+  Modal,
   Paper,
-  Button
+  ThemeProvider
 } from '@material-ui/core';
+import React from 'react';
 
 // Overriding Material UI styles
 const useStyles = makeStyles({
@@ -51,31 +51,31 @@ const theme = createMuiTheme({
   }
 });
 
-type Method = Function; // flow type
-
-// Component InvalidNumModal
-const InvalidNumModal = ({ onApply }: Method) => {
+const InvalidNumModal = ({ onApply }: Function) => {
   const paperStyles = useStyles();
+
+  const getModalContent = () => (
+    <Paper classes={{ root: paperStyles.root }}>
+      <h5 className='modal__title'>Invalid Number!</h5>
+      <p className='modal__text'>Number has to be a number between 1 and 99</p>
+      <Button color='secondary' onClick={onApply}>
+        Okay
+      </Button>
+    </Paper>
+  );
+
   return (
     <ThemeProvider theme={theme}>
       <Modal
+        open
         aria-labelledby='transition-modal-title'
         aria-describedby='transition-modal-description'
-        open={true}
         onClose={onApply}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{ timeout: 500 }}
       >
-        <Paper classes={{ root: paperStyles.root }}>
-          <h5 className='modal__title'>Invalid Number!</h5>
-          <p className='modal__text'>
-            Number has to be a number between 1 and 99
-          </p>
-          <Button color='secondary' onClick={onApply}>
-            Okay
-          </Button>
-        </Paper>
+        {getModalContent()}
       </Modal>
     </ThemeProvider>
   );

@@ -1,25 +1,25 @@
 // @flow
-import React, { useState } from 'react';
-import { withRouter } from 'react-router-dom';
-import { compose } from 'recompose';
-import { withFirebase } from '../firebase';
-import clsx from 'clsx';
 import {
-  makeStyles,
-  createMuiTheme,
-  ThemeProvider,
-  Paper,
   Button,
-  OutlinedInput,
-  TextField,
-  InputLabel,
+  createMuiTheme,
   FormControl,
+  FormHelperText,
   IconButton,
   InputAdornment,
-  FormHelperText
+  InputLabel,
+  makeStyles,
+  OutlinedInput,
+  Paper,
+  TextField,
+  ThemeProvider
 } from '@material-ui/core';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import clsx from 'clsx';
+import React, { useState, useRef } from 'react';
+import { withRouter } from 'react-router-dom';
+import { compose } from 'recompose';
+import { withFirebase } from '../firebase';
 
 // Overriding Material UI styles
 const useStyles = makeStyles(theme => ({
@@ -64,218 +64,229 @@ const theme = createMuiTheme({
 type Props = {
   firebase: Object,
   history: Object,
-  email: string,
-  username: string,
-  passwordOne: string,
-  passwordTwo: string,
   changeInput: Function,
   changeState: Function,
   changeError: Function
 };
 
-// Component SignUp
 const SignUp = ({
   firebase,
   history,
-  email,
-  username,
-  passwordOne,
-  passwordTwo,
   changeInput,
   changeState,
   changeError
 }: Props) => {
-  // Hooks useState
+  const passwordOneValue: Object = useRef();
 
-  // A state of showing/hiding of first password
-  const [isShowPasswordOne, showPasswordOne] = useState(false);
+  const classes = useStyles();
 
-  // A state of showing/hiding of second password
-  const [isShowPasswordTwo, showPasswordTwo] = useState(false);
+  const regExpEmail = /^[0-9a-z-.]+@[0-9a-z-]{2,}\.[a-z]{2,}$/;
+  /* eslint-disable max-len */
+  const regExpPassword = /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{7,}/;
 
-  // Registration button off/on status
-  const [isDisableButton, setDisableButton] = useState(false);
+  /* eslint-enable max-len */
+  const errorMessages = {
+    emptyUsername: 'Please enter name',
+    emptyPassword: 'Please enter password',
+    notEqualPasswords: 'Passwords not equal',
+    invalidEmail: 'Email is invalid.Please enter correct email.',
+    invalidPassword: `Password must contain 7 characters, 
+    at least one uppercase letter and one number.`
+  };
 
-  // Email input highlight status
-  const [isErrorEmail, setIsErrorEmail] = useState(false);
+  /**
+   * Status of showing / hiding passwords, highlighting inputs,
+   * disabling / enabling the registration button, contents of auxiliary texts
+   */
+  const [isEmptyUsername, setEmptyUsername] = useState(false);
+  const [textEmptyUsername, setTextEmptyUsername] = useState('');
 
-  // Email input helper text contents
+  const [isGlowErrorEmail, setGlowErrorEmail] = useState(false);
   const [errorTextEmail, setErrorTextEmail] = useState('');
 
-  // Password input highlight status
-  const [isErrorPassword, seIsErrorPassword] = useState(false);
-
-  // Password input helper text contents
+  const [isGlowErrorPassword, setGlowErrorPassword] = useState(false);
   const [errorTextPassword, setErrorTextPassword] = useState('');
+  const [isGlowEqualPasswords, setGlowEqualPasswords] = useState(false);
+  const [equalTextPasswords, setEqualTextPasswords] = useState('');
 
-  // Result of password comparison. Confirm password input highlight status
-  const [isEqualPasswords, setIsEqualPasswords] = useState(false);
+  const [isShowPasswordOne, setShowPasswordOne] = useState(false);
+  const [isShowPasswordTwo, setShowPasswordTwo] = useState(false);
 
-  // Confirm password input helper text contents
-  const [isEqualPasswordsBacklight, setIsEqualPasswordsBacklight] = useState(
-    ''
-  );
+  const [isDisableSignUpButton, setDisableSignUpButton] = useState(false);
 
-  // A function that write in state value of input.Called by change input
+  // SignUp functions
   const onChange = event => {
     changeInput(event);
   };
 
-  /*
-   * A function that check email input.
-   * Called when the focus is outside the email input.
-   */
-  const checkEmail = event => {
-    const email = event.target.value;
-    const isValidEmail = /^[0-9a-z-.]+@[0-9a-z-]{2,}\.[a-z]{2,}$/.test(email);
-    const isErrorEmail = !isValidEmail;
-    setIsErrorEmail(isErrorEmail);
-
-    if (isErrorEmail) {
-      setErrorTextEmail('Email is invalid.Please enter correct email.');
-      setDisableButton(true);
+  const checkEmptyUsername = event => {
+    if (event.target.value === '') {
+      setEmptyUsername(true);
+      setTextEmptyUsername(errorMessages.emptyUsername);
+      setDisableSignUpButton(true);
     } else {
-      setErrorTextEmail('');
-      setDisableButton(false);
+      setEmptyUsername(false);
+      setTextEmptyUsername('');
+      setDisableSignUpButton(false);
     }
   };
 
-  /*
-   * A function that check password input.
-   * Called when the focus is outside the password input.
-   */
-  const checkPassword = event => {
-    const password = event.target.value;
-    const isValidPassword = /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{7,}/.test(
-      password
-    );
-    const isErrorPassword = !isValidPassword;
-    seIsErrorPassword(isErrorPassword);
+  const checkEmptyValue = (value, setGlow, setText, setDisableBtn, text) => {
+    if (value === '') {
+      setGlow(true);
+      setText(`Please enter ${text}`);
+      setDisableBtn(true);
+    } else {
+      setGlow(false);
+      setText('');
+      setDisableBtn(false);
+    }
+  };
 
-    if (isErrorPassword) {
-      setErrorTextPassword(
-        `Password must contain 7 characters,
-        at least one uppercase letter and one number.`
+  const checkValidityValue = (
+    value,
+    regExp,
+    setGlow,
+    setText,
+    setDisableBtn,
+    text
+  ) => {
+    const isValidValue = regExp.test(value);
+
+    if (!isValidValue) {
+      setGlow(true);
+      setText(`${text}`);
+      setDisableBtn(true);
+    } else {
+      setGlow(false);
+      setText('');
+      setDisableBtn(false);
+    }
+  };
+
+  const checkCorrectEmail = ({ target }) => {
+    const email = target.value;
+
+    if (email === '') {
+      checkEmptyValue(
+        email,
+        setGlowErrorEmail,
+        setErrorTextEmail,
+        setDisableSignUpButton,
+        'email'
       );
-      setDisableButton(true);
     } else {
-      setErrorTextPassword('');
-      setDisableButton(false);
+      checkValidityValue(
+        email,
+        regExpEmail,
+        setGlowErrorEmail,
+        setErrorTextEmail,
+        setDisableSignUpButton,
+        errorMessages.invalidEmail
+      );
     }
   };
 
-  // A function that check equal first and second password
-  const checkConfirmPassword = event => {
-    const passwordOne = document.getElementById('passwordOne').value;
-    /*
-     * Если написать так, то flow не ругается, но тогда код не работает
-     * const passwordOne =
-     * (<HTMLInputElement>document.getElementById('passwordOne')).value;
-     */
-    const passwordTwo = event.target.value;
+  const checkCorrectPassword = ({ target }) => {
+    const password = target.value;
+
+    if (password === '') {
+      checkEmptyValue(
+        password,
+        setGlowErrorPassword,
+        setErrorTextPassword,
+        setDisableSignUpButton,
+        'password'
+      );
+    } else {
+      checkValidityValue(
+        password,
+        regExpPassword,
+        setGlowErrorPassword,
+        setErrorTextPassword,
+        setDisableSignUpButton,
+        errorMessages.invalidPassword
+      );
+    }
+  };
+
+  const checkEqualityPasswords = ({ target }) => {
+    const passwordOne = passwordOneValue.current.childNodes[0].value;
+    const passwordTwo = target.value;
 
     if (passwordOne !== passwordTwo) {
-      setIsEqualPasswords(true);
-      setIsEqualPasswordsBacklight('Passwords not equal');
-      setDisableButton(true);
+      setGlowEqualPasswords(true);
+      setEqualTextPasswords(errorMessages.notEqualPasswords);
+      setDisableSignUpButton(true);
     } else {
-      setIsEqualPasswords(false);
-      setIsEqualPasswordsBacklight('');
-      setDisableButton(false);
+      setGlowEqualPasswords(false);
+      setEqualTextPasswords('');
+      setDisableSignUpButton(false);
     }
   };
 
-  // Classes of hiding or showing password
-  const classes = useStyles();
-
-  // A function that show/hide first password
-  const handleClickShowPasswordOne = () => {
-    showPasswordOne(!isShowPasswordOne);
+  const showPasswordOne = () => {
+    setShowPasswordOne(!isShowPasswordOne);
   };
 
-  // A function that show/hide second password
-  const handleClickShowPasswordTwo = () => {
-    showPasswordTwo(!isShowPasswordTwo);
+  const showPasswordTwo = () => {
+    setShowPasswordTwo(!isShowPasswordTwo);
   };
 
-  /*
-   * A function that create new user
-   * and jumps to the game start screen.
-   * Called by function onSubmit
-   */
   const createUser = (email, password, username) => {
     firebase
       .doCreateUserWithEmailAndPassword(email, password)
       .then(authUser => {
-        return firebase.user(authUser.user.uid).set({
-          displayName: username,
-          email: email,
-          password: password
-        });
-      })
-      .then(() => {
-        changeState();
-        history.push('/enter-number');
+        firebase.user(authUser.user.uid);
+        authUser.user
+          .updateProfile({
+            displayName: username
+          })
+          .then(() => {
+            firebase
+              .doCreateUser(authUser.user.uid, username, email, password)
+              .then(() => {
+                changeState();
+                history.push('/enter-number');
+              });
+          });
       })
       .catch(error => {
         changeError(error);
+        if (error) {
+          setGlowErrorEmail(true);
+          setErrorTextEmail(error.message);
+          setDisableSignUpButton(true);
+        } else {
+          setGlowErrorEmail(true);
+          setErrorTextEmail('');
+          setDisableSignUpButton(false);
+        }
       });
   };
 
-  /*
-  Создал функцию для добавления в профиль пользователя имени пользователя.
-  Это имя хотел потом использовать для того что-бы 
-  оно появлялось вверху в синей полоске,когда игрок заходит в игру. 
-  Данная функция не работает. В предыдущей функции createUser имя заноситься 
-  в базу данных Realtime Database. 
-  .set({
-        displayName: username,
-        email: email,
-        password: password,
-      })
-
-  Но как это имя достать из базы данных не знаю. 
-  Могу достать значение свойства displayName,
-  но я не могу в это свойство записать имя
-
-  const updateUser = username => {
-    let person = firebase.currentUser();
-    console.log(person);
-    person.updateProfile({
-      displayName: username
-    })
-  }
-  */
-
-  /*
-   * A function that doing same actions that function createUser.
-   * Called by clicking Sign Up button
-   */
   const onSubmit = event => {
     event.preventDefault();
+
     const username = event.target.username.value;
     const email = event.target.email.value;
     const password = event.target.passwordOne.value;
     const passwordConfirm = event.target.passwordTwo.value;
 
     if (password !== passwordConfirm) {
-      setIsEqualPasswords(true);
-      setIsEqualPasswordsBacklight('Please enter correct password');
-      setDisableButton(true);
+      setGlowEqualPasswords(true);
+      setEqualTextPasswords(errorMessages.notEqualPasswords);
+      setDisableSignUpButton(true);
     } else if (password === '' || passwordConfirm === '') {
-      setIsEqualPasswords(true);
-      setIsEqualPasswordsBacklight('Please enter password');
-      setDisableButton(true);
+      setGlowEqualPasswords(true);
+      setEqualTextPasswords(errorMessages.emptyPassword);
+      setDisableSignUpButton(true);
     } else {
-      setIsEqualPasswords(false);
-      setIsEqualPasswordsBacklight('');
-      setDisableButton(false);
+      setGlowEqualPasswords(false);
+      setEqualTextPasswords('');
+      setDisableSignUpButton(false);
       createUser(email, password, username);
     }
-
-    //updateUser(username); // вызов функции, которая не работает.
-    //Не работает наверно потому что это функция обновления профиля,
-    // а он еще не создался.
   };
 
   return (
@@ -291,10 +302,12 @@ const SignUp = ({
               <TextField
                 type='text'
                 name='username'
-                value={username}
                 label='Enter name'
                 variant='outlined'
                 onChange={onChange}
+                onBlur={checkEmptyUsername}
+                error={isEmptyUsername}
+                helperText={textEmptyUsername}
               />
             </FormControl>
             {/* Email */}
@@ -302,12 +315,11 @@ const SignUp = ({
               <TextField
                 type='email'
                 name='email'
-                value={email}
                 label='Enter email'
                 variant='outlined'
                 onChange={onChange}
-                onBlur={checkEmail}
-                error={isErrorEmail}
+                onBlur={checkCorrectEmail}
+                error={isGlowErrorEmail}
                 helperText={errorTextEmail}
               />
             </FormControl>
@@ -317,7 +329,7 @@ const SignUp = ({
               variant='outlined'
             >
               <InputLabel
-                style={isErrorPassword ? { color: 'red' } : null}
+                style={isGlowErrorPassword ? { color: 'red' } : null}
                 htmlFor='standard-adornment-passwordOne'
               >
                 Enter password
@@ -325,17 +337,17 @@ const SignUp = ({
               <OutlinedInput
                 type={isShowPasswordOne ? 'text' : 'password'}
                 name='passwordOne'
-                value={passwordOne}
                 id='passwordOne'
                 onChange={onChange}
-                onBlur={checkPassword}
-                error={isErrorPassword}
+                onBlur={checkCorrectPassword}
+                error={isGlowErrorPassword}
+                ref={passwordOneValue}
                 endAdornment={
                   <InputAdornment position='end'>
                     <IconButton
                       aria-label='toggle password visibility'
                       edge='end'
-                      onClick={handleClickShowPasswordOne}
+                      onClick={showPasswordOne}
                     >
                       {isShowPasswordOne ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
@@ -353,7 +365,7 @@ const SignUp = ({
               variant='outlined'
             >
               <InputLabel
-                style={isEqualPasswords ? { color: 'red' } : null}
+                style={isGlowEqualPasswords ? { color: 'red' } : null}
                 htmlFor='standard-adornment-passwordTwo'
               >
                 Confirm password
@@ -361,16 +373,16 @@ const SignUp = ({
               <OutlinedInput
                 type={isShowPasswordTwo ? 'text' : 'password'}
                 name='passwordTwo'
-                value={passwordTwo}
                 id='passwordTwo'
                 onChange={onChange}
-                onBlur={checkConfirmPassword}
-                error={isEqualPasswords}
+                onBlur={checkEqualityPasswords}
+                error={isGlowEqualPasswords}
                 endAdornment={
                   <InputAdornment position='end'>
                     <IconButton
                       aria-label='toggle password visibility'
-                      onClick={handleClickShowPasswordTwo}
+                      edge='end'
+                      onClick={showPasswordTwo}
                     >
                       {isShowPasswordTwo ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
@@ -379,7 +391,7 @@ const SignUp = ({
                 labelWidth={130}
               />
               <FormHelperText style={{ color: 'red' }}>
-                {isEqualPasswordsBacklight}
+                {equalTextPasswords}
               </FormHelperText>
             </FormControl>
             {/* SignUp Button */}
@@ -388,7 +400,7 @@ const SignUp = ({
                 type='submit'
                 variant='contained'
                 color='primary'
-                disabled={isDisableButton}
+                disabled={isDisableSignUpButton}
               >
                 Sign Up
               </Button>

@@ -1,14 +1,14 @@
 // @flow
-import React from 'react';
 import {
-  makeStyles,
-  createMuiTheme,
-  ThemeProvider,
-  Modal,
   Backdrop,
+  Button,
+  createMuiTheme,
+  makeStyles,
+  Modal,
   Paper,
-  Button
+  ThemeProvider
 } from '@material-ui/core';
+import React from 'react';
 
 // Overriding Material UI styles
 const useStyles = makeStyles({
@@ -51,11 +51,19 @@ const theme = createMuiTheme({
   }
 });
 
-type Method = Function; // flow type
-
-// Component wrongGuessModal
-const WrongGuessModal = ({ onCloseWrongGuessModal }: Method) => {
+const WrongGuessModal = ({ onCloseWrongGuessModal }: Function) => {
   const paperStyles = useStyles();
+
+  const getModalContent = () => (
+    <Paper classes={{ root: paperStyles.root }}>
+      <h5 className='modal__title'>Don't Lie!</h5>
+      <p className='modal__text'>You know that is wrong...</p>
+      <Button color='primary' onClick={onCloseWrongGuessModal}>
+        Okay
+      </Button>
+    </Paper>
+  );
+
   return (
     <ThemeProvider theme={theme}>
       <Modal
@@ -67,13 +75,7 @@ const WrongGuessModal = ({ onCloseWrongGuessModal }: Method) => {
         BackdropComponent={Backdrop}
         BackdropProps={{ timeout: 500 }}
       >
-        <Paper classes={{ root: paperStyles.root }}>
-          <h5 className='modal__title'>Don't Lie!</h5>
-          <p className='modal__text'>You know that is wrong...</p>
-          <Button color='primary' onClick={onCloseWrongGuessModal}>
-            Okay
-          </Button>
-        </Paper>
+        {getModalContent()}
       </Modal>
     </ThemeProvider>
   );

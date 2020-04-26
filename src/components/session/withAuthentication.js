@@ -1,21 +1,15 @@
 // @flow
-import React from 'react';
-
-import AuthUserContext from './Context';
+import * as React from 'react';
 import { withFirebase } from '../firebase';
+import AuthUserContext from './Context';
 
-/*
-Если написать так, тогда некоторые ошибки в flow исчезнут, 
-но появятся ошибки в браузере и приложение не будет работать.
+const withAuthentication = (Component: React.AbstractComponent<Object>) => {
+  class WithAuthentication extends React.Component<
+    Object,
+    { authUser: Object | null }
+  > {
+    listener: Function;
 
-type Props = Any;
-
-const withAuthentication = 
-<Props extends object>(Component:React.ComponentType<Props>) => {
-*/
-
-const withAuthentication = Component => {
-  class WithAuthentication extends React.Component {
     constructor(props) {
       super(props);
       this.state = {

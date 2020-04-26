@@ -1,7 +1,7 @@
 // @flow
+import { Button, makeStyles } from '@material-ui/core';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { makeStyles, Button } from '@material-ui/core';
 import '../../assets/sass/style.scss';
 
 // Overriding Material UI styles
@@ -11,15 +11,10 @@ const useStyles = makeStyles({
   }
 });
 
-// Component NotFound
 const NotFound = () => {
-  const buttonStyles = useStyles(); // styles for button 'START GAME'
-  let history = useHistory(); // variable with history of routings
+  const buttonStyles = useStyles(); 
+  let history = useHistory(); 
 
-  /*
-   * A function that jump to the enter number screen.
-   * Called by clicking button 'START GAME'
-   */
   const startGame = () => {
     history.push('/enter-number');
   };

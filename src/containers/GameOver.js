@@ -1,9 +1,9 @@
 // @flow
+import { Button, makeStyles } from '@material-ui/core';
 import React from 'react';
-import { SubHeader } from '../components/subHeader';
 import { useHistory } from 'react-router-dom';
-import { makeStyles, Button } from '@material-ui/core';
 import { withAuthorization } from '../components/session';
+import { SubHeader } from '../components/subHeader';
 
 // Overriding Material UI styles
 const useStyles = makeStyles({
@@ -19,16 +19,11 @@ type Props = {
   resetState: Function
 };
 
-// Component GameOver
 const GameOver = ({ guessNumber, dataOpponents, resetState }: Props) => {
   const buttonStyles = useStyles(); // styles for button 'NEW GAME'
 
-  let history = useHistory(); // variable with history of routings
+  let history = useHistory(); 
 
-  /*
-   * A function that returns to the start screen and starts the game again.
-   * Called by clickin button 'New Game'
-   */
   const startNewGame = () => {
     resetState();
     history.push('/enter-number');

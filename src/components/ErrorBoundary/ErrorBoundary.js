@@ -10,7 +10,6 @@ type State = {
   hasError: boolean
 };
 
-// Component App
 export default class ErrorBoundary extends React.PureComponent<Props, State> {
   static defaultProps = {
     children: null

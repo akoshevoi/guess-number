@@ -1,13 +1,12 @@
 // @flow
-import React from 'react';
-import SignOutButton from '../signOut';
-import { AuthUserContext } from '../session';
-import { withFirebase } from '../firebase';
-import PersonIcon from '@material-ui/icons/Person';
 import { makeStyles } from '@material-ui/core';
+import PersonIcon from '@material-ui/icons/Person';
+import React from 'react';
+import { withFirebase } from '../firebase';
+import { AuthUserContext } from '../session';
+import SignOutButton from '../signOut';
 
 // Overriding Material UI styles
-
 const useStyles = makeStyles({
   root: {
     color: 'white',
@@ -16,35 +15,23 @@ const useStyles = makeStyles({
   }
 });
 
-// Component Header
 const Header = ({ firebase }) => {
-  /*
-   * Тут извлекаю из базы данных почту пользователя,
-   * потому что не получилось извлечь имя
-   */
-
-  // Get user email
   let user = firebase.currentUser();
-  let userEmail = user ? user.email : null;
-
-  /*
-   * Depending on user authorization, return
-   * the header of an authorized user or an unauthorized user
-   */
+  let userName = user ? user.displayName : null;
+  
   return (
     <div>
       <AuthUserContext.Consumer>
         {authUser =>
-          authUser ? <HeaderAuth userEmail={userEmail} /> : <HeaderNonAuth />
+          authUser ? <HeaderAuth userName={userName} /> : <HeaderNonAuth />
         }
       </AuthUserContext.Consumer>
     </div>
   );
 };
 
-// Header of an authorized user
-const HeaderAuth = ({ userEmail }) => {
-  const iconStyles = useStyles(); // styles for player icon
+const HeaderAuth = ({ userName }) => {
+  const iconStyles = useStyles(); 
 
   return (
     <div className='header  header--auth'>
@@ -55,7 +42,7 @@ const HeaderAuth = ({ userEmail }) => {
               <PersonIcon classes={{ root: iconStyles.root }} />
             </div>
             <div className='header__email'>
-              <p>{userEmail}</p>
+              <p>{userName}</p>
             </div>
           </div>
           <div className='header__btn'>
@@ -67,7 +54,6 @@ const HeaderAuth = ({ userEmail }) => {
   );
 };
 
-// Header of an unauthorized user
 const HeaderNonAuth = () => (
   <div className='header'>
     <div className='container'>

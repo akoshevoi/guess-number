@@ -1,21 +1,20 @@
 // @flow
+import {
+  Button,
+  createMuiTheme,
+  Grid,
+  makeStyles,
+  Paper,
+  TextField,
+  ThemeProvider
+} from '@material-ui/core';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import {
-  makeStyles,
-  createMuiTheme,
-  ThemeProvider,
-  Grid,
-  Paper,
-  Button,
-  TextField
-} from '@material-ui/core';
-import { getMarkupOrNull } from '../utils/helpers';
-import { InvalidNumModal } from '../components/modals';
-import { SubHeader } from '../components/subHeader';
-import { withAuthorization } from '../components/session';
-
 import '../assets/sass/style.scss';
+import { InvalidNumModal } from '../components/modals';
+import { withAuthorization } from '../components/session';
+import { SubHeader } from '../components/subHeader';
+import { getMarkupOrNull } from '../utils/helpers';
 
 // Overriding Material UI styles
 const useStylesFontSize = makeStyles({
@@ -116,7 +115,7 @@ type Props = {
   setStartGameData: Function
 };
 
-// Component EnterNum
+
 const EnterNum = ({
   guessNumber,
   invalidNumModalEnabled,
@@ -129,12 +128,11 @@ const EnterNum = ({
   const blueButton = useStylesFontSize(); // styles for button 'START GAME
   const pinkButton = useStylesColors(); // styles for button 'Reset', 'Confirm'
 
-  let history = useHistory(); // variable with history of routings
+  let history = useHistory(); 
 
   const goToNextScreen = () => {
-    // Function goToNextScreen represents the transition
-    setStartGameData(); // to the screen 'Opponent Guess'.
-    history.push('/opponent-guess'); // Called by clicking button “START GAME”
+    setStartGameData(); 
+    history.push('/opponent-guess'); 
   };
 
   // A piece of markup that appear if the number is valid
@@ -152,13 +150,8 @@ const EnterNum = ({
     </div>
   );
 
-  // A component that appear if the number is invalid (InvalidNumModal)
   const getInvalidNumModal = () => <InvalidNumModal onApply={resetState} />;
 
-  /*
-   * A helper function that shows pieces of markup or
-   * components depending on the validity of a number
-   */
   const startGameBlock = getMarkupOrNull(getStartGameBlock, isValidNum);
   const invalidNumModal = getMarkupOrNull(
     getInvalidNumModal,
@@ -170,8 +163,6 @@ const EnterNum = ({
       <SubHeader />
       <p className='select-number__title'>Start a New Game!</p>
       <ThemeProvider theme={theme}>
-        {' '}
-        {/* ThemeProvider (change styles of component Material UI) */}
         {/* Card with box-shadow */}
         <Paper>
           <form>
@@ -189,7 +180,7 @@ const EnterNum = ({
                   label='Select a Number'
                   color='primary'
                   onChange={setGuessNumber}
-                  value={(guessNumber = isValidNum ? '' : guessNumber)}
+                  value={guessNumber === isValidNum ? '' : guessNumber}
                 />
               </Grid>
               {/* Button Grid-container */}
@@ -219,13 +210,10 @@ const EnterNum = ({
                     Confirm
                   </Button>
                 </Grid>
-              </Grid>{' '}
-              {/* Button Grid-container */}
-            </Grid>{' '}
-            {/* Common Grid-container */}
+              </Grid>
+            </Grid>
           </form>
-        </Paper>{' '}
-        {/* Card with box-shadow */}
+        </Paper>
       </ThemeProvider>
       {/* A piece of markup that appear if the number is invalid */}
       {invalidNumModal}

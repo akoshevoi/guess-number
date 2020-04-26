@@ -1,18 +1,20 @@
 // @flow
-import React, { useState, useEffect, useRef } from 'react';
-import { SubHeader } from '../components/subHeader';
-import { useHistory } from 'react-router-dom';
-import { withAuthorization } from '../components/session';
 import {
-  makeStyles,
+  Button,
   createMuiTheme,
-  ThemeProvider,
+  makeStyles,
   Paper,
-  Button
+  ThemeProvider
 } from '@material-ui/core';
-import { getMarkupOrNull } from '../utils/helpers';
-import { WrongGuessModal } from '../components/modals';
+import React, { useEffect, useRef, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import shortid from 'shortid';
 import '../assets/sass/style.scss';
+import { WrongGuessModal } from '../components/modals';
+import { withAuthorization } from '../components/session';
+import { SubHeader } from '../components/subHeader';
+import { getMarkupOrNull } from '../utils/helpers';
+
 
 // Overriding Material UI styles
 const useStyles = makeStyles({
@@ -60,34 +62,24 @@ type Props = {
   setDataOpponents: Function
 };
 
-// Component OpponentGuess
 const OpponentGuess = ({
   guessNumber,
   generateRandomNumber,
   setGameOver,
   setDataOpponents
 }: Props) => {
-  // Initializing shortid library for generate random id
-  const shortid = require('shortid');
 
-  // Variable with history of routings
   let history = useHistory();
-
-  // Initial call generateRandomNumber function
-  const initialGuess = generateRandomNumber(1, 100, guessNumber);
-
-  // Styles for buttons '+', '-'
   const buttonStyles = useStyles();
 
-  // useState Hooks
-
-  // State of WrongGuessModal
+  /**
+   * Initial call generateRandomNumber function
+   * Status of showing / hiding wrong guess modal; current guess number, 
+   * array of guessable numbers, guessable range of numbers
+   */
+  const initialGuess = generateRandomNumber(1, 100, guessNumber);
   const [wrongGuessModalEnabled, setWrongGuessModalEnabled] = useState(false);
-
-  // State of current GuessNumber
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
-
-  // State of array GuessNumbers
   const [pastGuesses, setPastGuesses] = useState([
     {
       index: 1,
@@ -95,13 +87,7 @@ const OpponentGuess = ({
       id: shortid.generate()
     }
   ]);
-
-  // useRef
-
-  // Minimum value of the range of guessed numbers
   const currentLow = useRef(1);
-
-  // Maximum value of the range of guessed numbers
   const currentHigh = useRef(100);
 
   /* useEffect.
@@ -124,59 +110,46 @@ const OpponentGuess = ({
     history
   ]);
 
-  // A function that set value of visibility WrongGuessModal in state
   const setWrongGuessModalVisibility = bool => setWrongGuessModalEnabled(bool);
 
-  // A function that check what button clicked
-  const getDirection = event => {
+  // *** Components methods *** //
+  const getValueBtn = event => {
     const valueBtn = event.target.textContent;
-    const direction = valueBtn === '-' ? 'lower' : 'greater';
-    return direction;
+    const directionGuesses = valueBtn === '-' ? 'lower' : 'greater';
+    return directionGuesses;
   };
 
-  // A function that check cheating Player
-  const cheatingPlayer = direction => {
+  const checkCheatingPlayer = directionGuesses => {
     const isWrongGusessCondition =
-      (direction === 'lower' && currentGuess < guessNumber) ||
-      (direction === 'greater' && currentGuess > guessNumber);
+      (directionGuesses === 'lower' && currentGuess < guessNumber) ||
+      (directionGuesses === 'greater' && currentGuess > guessNumber);
     return isWrongGusessCondition;
   };
 
-  // A function that change range of guessed numbers
-  const changeRangeNumbers = direction => {
-    if (direction === 'lower') {
+  const changeRangeNumbers = directionGuesses => {
+    if (directionGuesses === 'lower') {
       currentHigh.current = currentGuess;
     } else {
       currentLow.current = currentGuess + 1;
     }
   };
 
-  /*
-   * A function that generate new random number
-   * and write a new random number in array
-   */
-  const statisticGueses = event => {
-    // Call function that check what button clicked
-    const direction = getDirection(event);
+  const statisticGuesses = event => {
+    const trendGuesses = getValueBtn(event);
+    const wrongGuessCondition = checkCheatingPlayer(trendGuesses);
 
-    // Call function that check cheating Player
-    const condition = cheatingPlayer(direction);
-
-    // Checking condition of cheating Player
-    if (condition) {
+    if (wrongGuessCondition) {
       setWrongGuessModalVisibility(true);
     } else {
-      changeRangeNumbers(direction);
+      changeRangeNumbers(trendGuesses);
 
-      // Generate new random number
       const nextNumber = generateRandomNumber(
         currentLow.current,
         currentHigh.current,
         currentGuess
       );
-      setCurrentGuess(nextNumber); // write a new random number
+      setCurrentGuess(nextNumber); 
 
-      // Write new number in array
       const newItem = {
         index: pastGuesses.length + 1,
         number: nextNumber.toString(),
@@ -186,26 +159,17 @@ const OpponentGuess = ({
     }
   };
 
-  // A component that appear if the number is invalid (InvalidNumModal)
   const getWrongGuessModal = () => (
     <WrongGuessModal
       onCloseWrongGuessModal={() => setWrongGuessModalEnabled(false)}
     />
   );
 
-  /*
-   * A helper function that shows the WrongGuessModal component
-   * depending on whether the player is cheating
-   */
   const wrongGuessModal = getMarkupOrNull(
     getWrongGuessModal,
     wrongGuessModalEnabled
   );
 
-  /*
-   * A piece of the markup that contains the attempt sequence number
-   * and the randomly generated number
-   */
   const elements = pastGuesses.map(({ index, number, id }) => (
     <div key={id} className='opponent-guess__item'>
       <div className='opponent-guess__element'>#{index}</div>
@@ -219,19 +183,22 @@ const OpponentGuess = ({
       <div className='opponent-guess__title'>Opponent's Guess</div>
       <div className='opponent-guess__number'>{currentGuess}</div>
       <ThemeProvider theme={theme}>
+        {/* Card with box-shadow */}
         <Paper>
+          {/* Button minus */}
           <Button
             variant='contained'
             color='secondary'
-            onClick={statisticGueses}
+            onClick={statisticGuesses}
             classes={{ root: buttonStyles.root }}
           >
             -
           </Button>
+          {/* Button plus */}
           <Button
             variant='contained'
             color='secondary'
-            onClick={statisticGueses}
+            onClick={statisticGuesses}
             classes={{ root: buttonStyles.root }}
           >
             +
@@ -239,6 +206,7 @@ const OpponentGuess = ({
         </Paper>
       </ThemeProvider>
       <div className='opponent-guess__list'>{elements}</div>
+      {/* A piece of markup that appear if the player is cheating */}
       {wrongGuessModal}
     </div>
   );

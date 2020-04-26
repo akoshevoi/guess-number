@@ -1,17 +1,21 @@
-// ./sass/style.scss
+// src/assets/sass/style.scss
 
+// Variables imports
 @import './variables';
-@import './components/app';
-@import './components/sub-header';
-@import './components/header';
-@import './components/select-number';
-@import './components/start-game';
-@import './components/modal';
+
+// Component imports
 @import './components/opponent-guess';
+@import './components/select-number';
+@import './components/sub-header';
+@import './components/start-game';
 @import './components/game-over';
-@import './components/error';
 @import './components/not-found';
+@import './components/header';
+@import './components/modal';
+@import './components/error';
 @import './components/auth';
+@import './components/app';
+
 
 body {
 	font-family: $font;
