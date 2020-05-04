@@ -1,3 +1,14 @@
+You can visit the application [here] (https://guess-number-8899b.web.app/).
+To play, you need to register (if you are not registered) or enter (if you are registered).
+Description of the application.
+1. Enter a number from 1 to 99.
+2. Press confirm or reset if you want to change the number.
+3. Click START GAME or reset if you want to change the number.
+4. The computer generates a random number that is different from the number you entered.
+5. Using the plus and minus buttons, you need to help the computer guess the number. If the number you entered is greater than the random number of the generated computer, click the plus button; otherwise, click the minus button.
+6. Then, after clicking the plus or minus button, the computer will generate the next random number. This number will be more or less than the previous number, depending on which button was pressed: plus or minus.
+7. After the computer guesses your number, the number of guessing attempts, the number you entered, and the NEW GAME button will appear.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
